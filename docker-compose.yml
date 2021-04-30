@@ -1,5 +1,12 @@
 version: "3.7"
 services:
+  mongo-seed:
+    build: docker/mongodb-seed
+    links:
+      - mongodb
+    networks:
+      - subscription-network
+
   mongodb:
     image: mongo:latest
     hostname: "mongodb"

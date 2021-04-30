@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Shire",
+    "startAt": "07:00",
+    "endAt": "09:00",
+    "minimumAge": 5,
+    "maximumAge": 100,
+    "unitPrice": 29.90
+  },
+  {
+    "name": "Gondor",
+    "startAt": "10:00",
+    "endAt": "13:00",
+    "minimumAge": 11,
+    "maximumAge": 50,
+    "unitPrice": 59.90
+  },
+  {
+    "name": "Mordor",
+    "startAt": "14:00",
+    "endAt": "19:00",
+    "minimumAge": 18,
+    "maximumAge": 40,
+    "unitPrice": 99.90
+  }
+]
