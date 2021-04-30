@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      username: root
+      password: rootpassword
+      database: trail
+      port: 27017
+      host: mongodb
+      authentication-database: admin

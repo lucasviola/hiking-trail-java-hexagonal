@@ -1,11 +1,23 @@
 version: "3.7"
 services:
+
+  hikingtrail-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: hikingtrail-service
+    container_name: hikingtrail-service
+    ports:
+      - "8080:8080"
+    networks:
+      - hikingTrail-network
+
   mongo-seed:
     build: docker/mongodb-seed
     links:
       - mongodb
     networks:
-      - subscription-network
+      - hikingTrail-network
 
   mongodb:
     image: mongo:latest
@@ -17,8 +29,8 @@ services:
     ports:
       - 27017:27017
     networks:
-      - subscription-network
+      - hikingTrail-network
 
 networks:
-  subscription-network:
+  hikingTrail-network:
     driver: bridge

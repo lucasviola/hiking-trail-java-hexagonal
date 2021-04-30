@@ -7,7 +7,7 @@ build-app:
 	docker compose build --no-cache $(APP_NAME)
 
 run:
-	docker compose up
+	docker compose up -d
 
 test:
 	./gradlew test
