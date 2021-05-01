@@ -1,5 +1,9 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure.rest;
 
+import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
+import com.element.hikingTrail.trail.infrastructure.database.TrailRepository;
+import com.element.hikingTrail.trail.application.TrailService;
+import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

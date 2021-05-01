@@ -1,4 +1,4 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure.database;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

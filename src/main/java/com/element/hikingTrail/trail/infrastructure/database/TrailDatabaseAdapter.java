@@ -1,5 +1,8 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure.database;
 
+import com.element.hikingTrail.trail.TrailMapper;
+import com.element.hikingTrail.trail.application.TrailPersistencePort;
+import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,11 +12,12 @@ import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor
-public class TrailDatabaseAdapter {
+public class TrailDatabaseAdapter implements TrailPersistencePort {
 
     private final TrailRepository trailRepository;
     private final TrailMapper trailMapper;
 
+    @Override
     public List<Trail> findAll() {
 
         var trailEntities = trailRepository.findAll();

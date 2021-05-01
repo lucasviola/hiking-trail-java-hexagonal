@@ -1,4 +1,4 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure.database;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

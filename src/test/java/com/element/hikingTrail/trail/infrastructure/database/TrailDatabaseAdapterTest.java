@@ -1,11 +1,10 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure.database;
 
 import com.element.hikingTrail.IntegrationTest;
+import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -1,10 +1,12 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure;
 
+import com.element.hikingTrail.trail.TrailMapper;
+import com.element.hikingTrail.trail.domain.Trail;
+import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class TrailMapperTest {
 
