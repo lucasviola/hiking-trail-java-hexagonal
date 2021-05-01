@@ -19,4 +19,8 @@ public class TrailService {
 
         return all;
     }
+
+    public List<Trail> findByName(String trailName) {
+        return trailDatabaseAdapter.findByName(trailName);
+    }
 }

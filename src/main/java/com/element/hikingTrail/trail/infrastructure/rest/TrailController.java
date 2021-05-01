@@ -7,10 +7,15 @@ import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,9 +26,15 @@ public class TrailController {
     private final TrailRepository trailRepository;
 
     @GetMapping("/trails")
-    public ResponseEntity<TrailResponse> getAllTrails() {
+    public ResponseEntity<TrailResponse> getTrails(@RequestParam(required = false) String trailName) {
+        List<Trail> availableTrails;
 
-        List<Trail> availableTrails = trailService.findAllTrails();
+        if (StringUtils.hasText(trailName)) {
+            availableTrails = trailService.findByName(trailName);
+
+        } else {
+            availableTrails = trailService.findAllTrails();
+        }
 
         var responseBody = TrailResponse.builder()
                 .trails(availableTrails)

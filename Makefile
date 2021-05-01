@@ -5,7 +5,7 @@ MONGO_SEED=mongo-seed
 build-gradle:
 	./gradlew clean build
 
-build-app:
+build-docker:
 	docker compose build --no-cache $(APP_NAME)
 
 build-mongo:
@@ -23,4 +23,4 @@ test:
 stop:
 	docker compose down
 
-refresh: build-gradle stop build-app build-mongo run
+refresh: build-gradle stop build-docker build-mongo run

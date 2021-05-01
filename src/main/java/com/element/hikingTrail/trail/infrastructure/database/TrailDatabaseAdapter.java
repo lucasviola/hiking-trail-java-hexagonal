@@ -19,8 +19,16 @@ public class TrailDatabaseAdapter implements TrailPersistencePort {
 
     @Override
     public List<Trail> findAll() {
-
         var trailEntities = trailRepository.findAll();
+
+        return trailEntities.stream()
+                .map(trailMapper::fromEntityToDomain)
+                .collect(toList());
+    }
+
+    @Override
+    public List<Trail> findByName(String name) {
+        var trailEntities = trailRepository.findTrailEntityByName(name);
 
         return trailEntities.stream()
                 .map(trailMapper::fromEntityToDomain)
