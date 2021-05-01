@@ -12,12 +12,12 @@ services:
     networks:
       - hikingTrail-network
 
-  mongo-seed:
-    build: docker/mongodb-seed
-    links:
-      - mongodb
-    networks:
-      - hikingTrail-network
+#  mongo-seed:
+  ##    build: docker/mongodb-seed
+  ##    links:
+  ##      - mongodb
+  ##    networks:
+  ##      - hikingTrail-network
 
   mongodb:
     image: mongo:latest

@@ -1,4 +1,6 @@
-APP_NAME=hikingTrail
+APP_NAME=hikingtrail-service
+MONGO_NAME=mongodb
+MONGO_SEED=mongo-seed
 
 build-gradle:
 	./gradlew clean build
@@ -6,8 +8,14 @@ build-gradle:
 build-app:
 	docker compose build --no-cache $(APP_NAME)
 
+build-mongo:
+	docker compose build --no-cache $(MONGO_NAME)
+
+build-mongo-seed:
+	docker compose build --no-cache $(MONGO_SEED)
+
 run:
-	docker compose up -d
+	docker compose up
 
 test:
 	./gradlew test
@@ -15,4 +23,4 @@ test:
 stop:
 	docker compose down
 
-refresh: build-gradle stop build-app run
+refresh: build-gradle stop build-app build-mongo run
