@@ -30,11 +30,16 @@ dependencies {
 	testCompileOnly('org.projectlombok:lombok')
 	testAnnotationProcessor('org.projectlombok:lombok')
 	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.19.0'
-//	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 }
 
 test {
 	useJUnitPlatform()
+
+	afterTest { descriptor, result ->
+		logger.lifecycle("$descriptor")
+		logger.lifecycle("Result: $result \n")
+	}
 }
 compileJava {
 	options.compilerArgs = [
