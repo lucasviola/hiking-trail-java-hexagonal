@@ -36,4 +36,14 @@ public class BookingController {
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+    @DeleteMapping("/booking")
+    public ResponseEntity<BookingResponse> cancelBooking(@RequestParam @NonNull String bookingId) {
+        var canceledBooking = bookingService.cancelBooking(bookingId);
+
+        var responseBody =
+                bookingMapper.mapFromBookingToBookingResponse(canceledBooking);
+
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
 }

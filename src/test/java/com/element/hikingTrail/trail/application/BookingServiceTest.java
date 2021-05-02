@@ -1,6 +1,7 @@
 package com.element.hikingTrail.trail.application;
 
 import com.element.hikingTrail.trail.domain.Booking;
+import com.element.hikingTrail.trail.domain.BookingStatus;
 import com.element.hikingTrail.trail.infrastructure.database.BookingDatabaseAdapter;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class BookingServiceTest {
         Booking bookedTrail = Booking.builder()
                 .trailName("name")
                 .bookingId("id")
-                .bookingStatus("BOOKED")
+                .bookingStatus(BookingStatus.BOOKED.name())
                 .build();
 
         bookingService.bookTrail(booking);
@@ -46,7 +47,7 @@ class BookingServiceTest {
         Booking bookedTrail = Booking.builder()
                 .trailName("name")
                 .bookingId(bookingId)
-                .bookingStatus("BOOKED")
+                .bookingStatus(BookingStatus.BOOKED.name())
                 .build();
         when(bookingDatabaseAdapter.findByBookingId(bookingId)).thenReturn(bookedTrail);
 
@@ -55,4 +56,23 @@ class BookingServiceTest {
         verify(bookingDatabaseAdapter).findByBookingId(bookingId);
     }
 
+    @Test
+    public void whenCancel_shouldUpdateBookingWithCanceledStatus() {
+        String bookingId = "xvcfg";
+        Booking bookedTrail = Booking.builder()
+                .trailName("name")
+                .bookingId(bookingId)
+                .bookingStatus(BookingStatus.BOOKED.name())
+                .build();
+        var expectedCanceledBooking = Booking.builder()
+                .trailName("name")
+                .bookingId(bookingId)
+                .bookingStatus(BookingStatus.CANCELED.name())
+                .build();
+        when(bookingDatabaseAdapter.findByBookingId(bookingId)).thenReturn(bookedTrail);
+
+        bookingService.cancelBooking(bookingId);
+
+        verify(bookingDatabaseAdapter).saveBooking(expectedCanceledBooking);
+    }
 }

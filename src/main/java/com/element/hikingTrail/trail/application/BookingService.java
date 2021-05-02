@@ -31,4 +31,13 @@ public class BookingService {
     public Booking findBooking(String bookingId) {
         return bookingDatabaseAdapter.findByBookingId(bookingId);
     }
+
+    public Booking cancelBooking(String bookingId) {
+
+        Booking booking = bookingDatabaseAdapter.findByBookingId(bookingId);
+
+        booking.setBookingStatus(BookingStatus.CANCELED.name());
+
+        return bookingDatabaseAdapter.saveBooking(booking);
+    }
 }

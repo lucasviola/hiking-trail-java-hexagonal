@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class BookingEntity {
 
     @Id
-    private String id;
     private String bookingId;
     private String trailName;
     private String bookingStatus;

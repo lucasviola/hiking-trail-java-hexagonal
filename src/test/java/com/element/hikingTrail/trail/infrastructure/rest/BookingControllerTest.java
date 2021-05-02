@@ -68,4 +68,27 @@ class BookingControllerTest extends IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Test
+    @DisplayName("DELETE /booking?bookingId=fdsdf")
+    public void whenDeleteBooking_withBookingIdAsParam_shouldChangeStatusToCanceled() {
+        String bookingId = "dsasd";
+        bookingRepository.save(BookingEntity.builder()
+                .bookingId(bookingId)
+                .trailName("Shire")
+                .bookingStatus(BookingStatus.BOOKED.name())
+                .build());
+        var booking = Booking.builder()
+                .bookingStatus(BookingStatus.CANCELED.name())
+                .trailName("Shire")
+                .bookingId(bookingId)
+                .build();
+        var expectedResponse = BookingResponse.builder()
+                .booking(booking)
+                .build();
+
+        ResponseEntity<BookingResponse> response = bookingController.cancelBooking(bookingId);
+
+        assertThat(response.getBody()).isEqualTo(expectedResponse);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }
