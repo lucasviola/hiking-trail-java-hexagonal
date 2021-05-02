@@ -64,30 +64,4 @@ class TrailControllerTest extends IntegrationTest {
         assertThat(response.getBody()).usingRecursiveComparison()
                 .isEqualTo(expectedResponse);
     }
-
-    @Test
-    public void whenPostBooking_withRequestBody_shouldSaveBookingInTheDatabase() {
-        var expectedResponse = BookingResponse.builder()
-                .booking(Booking.builder()
-                        .trailName("trail")
-                        .bookingId("id")
-                        .bookingStatus(BookingStatus.BOOKED.name())
-                        .build())
-                .build();
-        var bookingRequest = BookingRequest.builder()
-                .trailName("trail")
-                .bookingDetail(BookingDetail.builder()
-                        .hikers(singletonList(Hiker.builder()
-                                .name("Raul")
-                                .age(27)
-                                .build()))
-                        .build())
-                .build();
-
-        ResponseEntity<BookingResponse> response = trailController.bookTrail(bookingRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).usingRecursiveComparison()
-                .isEqualTo(expectedResponse);
-    }
 }

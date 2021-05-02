@@ -1,13 +1,12 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
 import com.element.hikingTrail.trail.domain.Booking;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingResponse {
-    private final Booking booking;
+    private Booking booking;
 }

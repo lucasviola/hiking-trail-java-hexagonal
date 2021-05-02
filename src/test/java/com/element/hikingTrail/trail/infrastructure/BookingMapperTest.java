@@ -4,6 +4,7 @@ import com.element.hikingTrail.trail.domain.BookingStatus;
 import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.infrastructure.database.BookingEntity;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingRequest;
+import com.element.hikingTrail.trail.infrastructure.rest.BookingResponse;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -58,6 +59,22 @@ class BookingMapperTest {
         Booking actual = mapper.mapFromEntityToDomain(bookingEntity);
 
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldMapFromBookingDomainToBookingResponse() {
+        var booking = Booking.builder()
+                .trailName("name")
+                .bookingStatus("status")
+                .bookingId("id")
+                .build();
+        var expectedBookingResponse = BookingResponse.builder()
+                .booking(booking)
+                .build();
+
+        BookingResponse actual = mapper.mapFromBookingToBookingResponse(booking);
+
+        assertThat(actual).isEqualTo(expectedBookingResponse);
     }
 
 }
