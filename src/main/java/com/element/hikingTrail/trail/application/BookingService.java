@@ -2,12 +2,9 @@ package com.element.hikingTrail.trail.application;
 
 import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.domain.BookingStatus;
-import com.element.hikingTrail.trail.infrastructure.database.BookingDatabaseAdapter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 
 @Service
@@ -29,5 +26,9 @@ public class BookingService {
 
     private String generateId() {
         return RandomStringUtils.randomAlphanumeric(5);
+    }
+
+    public Booking findBooking(String bookingId) {
+        return bookingDatabaseAdapter.findByBookingId(bookingId);
     }
 }

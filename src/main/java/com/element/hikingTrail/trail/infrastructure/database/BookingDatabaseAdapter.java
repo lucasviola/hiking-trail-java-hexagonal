@@ -22,4 +22,11 @@ public class BookingDatabaseAdapter implements BookingPersistencePort {
 
         return bookingMapper.mapFromEntityToDomain(saved);
     }
+
+    @Override
+    public Booking findByBookingId(String bookingId) {
+        BookingEntity bookingEntity = bookingRepository.findByBookingId(bookingId);
+
+        return bookingMapper.mapFromEntityToDomain(bookingEntity);
+    }
 }

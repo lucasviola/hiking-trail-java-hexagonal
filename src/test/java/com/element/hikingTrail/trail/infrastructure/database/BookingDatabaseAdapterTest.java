@@ -46,4 +46,25 @@ class BookingDatabaseAdapterTest {
         assertThat(actual).isEqualTo(booking);
     }
 
+    @Test
+    public void shouldFindBookEntityByIdAndReturnBooking() {
+        var bookingId = "fdsdf";
+        var booking = Booking.builder()
+                .trailName("name")
+                .bookingId(bookingId)
+                .bookingStatus("status")
+                .build();
+        var bookingEntity = BookingEntity.builder()
+                .bookingId(bookingId)
+                .trailName("name")
+                .bookingStatus("status")
+                .build();
+        when(bookingRepository.findByBookingId(bookingId)).thenReturn(bookingEntity);
+
+        Booking actual = bookingDatabaseAdapter.findByBookingId(bookingId);
+
+        verify(bookingRepository).findByBookingId(bookingId);
+        assertThat(actual).isEqualTo(booking);
+    }
+
 }

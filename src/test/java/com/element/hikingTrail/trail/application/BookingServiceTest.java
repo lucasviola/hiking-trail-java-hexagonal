@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
@@ -37,6 +38,21 @@ class BookingServiceTest {
         bookingService.bookTrail(booking);
 
 //        verify(bookingDatabaseAdapter).saveBooking(eq(bookedTrail));
+    }
+
+    @Test
+    public void shouldFindBookByBookId() {
+        String bookingId = "xvcfg";
+        Booking bookedTrail = Booking.builder()
+                .trailName("name")
+                .bookingId(bookingId)
+                .bookingStatus("BOOKED")
+                .build();
+        when(bookingDatabaseAdapter.findByBookingId(bookingId)).thenReturn(bookedTrail);
+
+        bookingService.findBooking(bookingId);
+
+        verify(bookingDatabaseAdapter).findByBookingId(bookingId);
     }
 
 }
