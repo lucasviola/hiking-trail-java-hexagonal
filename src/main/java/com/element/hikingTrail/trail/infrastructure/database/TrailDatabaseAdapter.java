@@ -1,6 +1,6 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
-import com.element.hikingTrail.trail.TrailMapper;
+import com.element.hikingTrail.trail.infrastructure.TrailMapper;
 import com.element.hikingTrail.trail.application.TrailPersistencePort;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;

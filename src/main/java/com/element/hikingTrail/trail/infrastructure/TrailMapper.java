@@ -1,4 +1,4 @@
-package com.element.hikingTrail.trail;
+package com.element.hikingTrail.trail.infrastructure;
 
 import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;

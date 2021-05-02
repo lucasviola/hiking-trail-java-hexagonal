@@ -1,6 +1,5 @@
 package com.element.hikingTrail.trail.infrastructure;
 
-import com.element.hikingTrail.trail.TrailMapper;
 import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import org.junit.jupiter.api.Test;

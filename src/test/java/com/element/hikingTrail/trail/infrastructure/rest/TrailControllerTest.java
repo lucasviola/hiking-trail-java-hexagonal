@@ -1,7 +1,7 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
 import com.element.hikingTrail.IntegrationTest;
-import com.element.hikingTrail.trail.domain.Trail;
+import com.element.hikingTrail.trail.domain.*;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import com.element.hikingTrail.trail.infrastructure.database.TrailRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +59,32 @@ class TrailControllerTest extends IntegrationTest {
                 .build();
 
         ResponseEntity<TrailResponse> response = trailController.getTrails("firstTrail");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).usingRecursiveComparison()
+                .isEqualTo(expectedResponse);
+    }
+
+    @Test
+    public void whenPostBooking_withRequestBody_shouldSaveBookingInTheDatabase() {
+        var expectedResponse = BookingResponse.builder()
+                .booking(Booking.builder()
+                        .trailName("trail")
+                        .bookingId("id")
+                        .bookingStatus(BookingStatus.BOOKED.name())
+                        .build())
+                .build();
+        var bookingRequest = BookingRequest.builder()
+                .trailName("trail")
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(singletonList(Hiker.builder()
+                                .name("Raul")
+                                .age(27)
+                                .build()))
+                        .build())
+                .build();
+
+        ResponseEntity<BookingResponse> response = trailController.bookTrail(bookingRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).usingRecursiveComparison()

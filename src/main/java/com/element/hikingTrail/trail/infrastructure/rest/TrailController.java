@@ -1,21 +1,19 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
+import com.element.hikingTrail.trail.application.BookingService;
+import com.element.hikingTrail.trail.domain.Booking;
+import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import com.element.hikingTrail.trail.infrastructure.database.TrailRepository;
 import com.element.hikingTrail.trail.application.TrailService;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,6 +21,8 @@ import java.util.List;
 public class TrailController {
 
     private final TrailService trailService;
+    private final BookingService bookingService;
+    private final BookingMapper bookingMapper;
     private final TrailRepository trailRepository;
 
     @GetMapping("/trails")
@@ -40,6 +40,18 @@ public class TrailController {
                 .trails(availableTrails)
                 .build();
 
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @PostMapping("/booking")
+    public ResponseEntity<BookingResponse> bookTrail(@RequestBody BookingRequest bookingRequest) {
+
+        Booking booking = bookingMapper.mapFromRequestToDomain(bookingRequest);
+        Booking bookedTrail = bookingService.bookTrail(booking);
+
+        var responseBody = BookingResponse.builder()
+                .booking(bookedTrail)
+                .build();
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

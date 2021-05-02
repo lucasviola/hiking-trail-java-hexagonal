@@ -1,9 +1,7 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
-import com.element.hikingTrail.IntegrationTest;
-import com.element.hikingTrail.trail.TrailMapper;
+import com.element.hikingTrail.trail.infrastructure.TrailMapper;
 import com.element.hikingTrail.trail.domain.Trail;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
