@@ -37,7 +37,7 @@ class BookingMapperTest {
         Booking actual = mapper.mapFromRequestToDomain(bookingRequest, trail);
 
         assertThat(actual.getTrail()).isEqualTo(trail);
-        assertThat(actual.getHikers()).isEqualTo(bookingRequest.getBookingDetail().getHikers());
+        assertThat(actual.getBookingDetail().getHikers()).isEqualTo(bookingRequest.getBookingDetail().getHikers());
     }
 
     @Test
@@ -58,13 +58,17 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
         var expected = BookingEntity.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
 
         BookingEntity actual = mapper.mapFromDomainToEntity(booking);
@@ -90,13 +94,17 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
         var expected = Booking.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
 
         Booking actual = mapper.mapFromEntityToDomain(bookingEntity);
@@ -121,7 +129,9 @@ class BookingMapperTest {
         var booking = Booking.builder()
                 .trail(trail)
                 .bookingStatus("status")
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .bookingId("id")
                 .build();
         var expectedBookingResponse = BookingResponse.builder()

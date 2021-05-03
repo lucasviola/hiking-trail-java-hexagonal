@@ -25,7 +25,7 @@ public class BookingService {
 
         var bookedTrail = Booking.builder()
                 .trail(booking.getTrail())
-                .hikers(booking.getHikers())
+                .bookingDetail(booking.getBookingDetail())
                 .bookingId(generateId())
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .build();

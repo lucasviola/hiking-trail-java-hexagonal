@@ -1,9 +1,6 @@
 package com.element.hikingTrail.trail.application;
 
-import com.element.hikingTrail.trail.domain.Booking;
-import com.element.hikingTrail.trail.domain.BookingStatus;
-import com.element.hikingTrail.trail.domain.Hiker;
-import com.element.hikingTrail.trail.domain.Trail;
+import com.element.hikingTrail.trail.domain.*;
 import com.element.hikingTrail.trail.infrastructure.database.BookingDatabaseAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -88,13 +85,17 @@ class BookingServiceTest {
         var bookingId = "xvcfg";
         Booking bookedTrail = Booking.builder()
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .bookingId(bookingId)
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .build();
         Booking expectedCanceledBooking = Booking.builder()
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .bookingId(bookingId)
                 .bookingStatus(BookingStatus.CANCELED.name())
                 .build();

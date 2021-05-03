@@ -1,12 +1,12 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
 import com.element.hikingTrail.IntegrationTest;
+import com.element.hikingTrail.trail.domain.BookingDetail;
 import com.element.hikingTrail.trail.domain.Hiker;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,13 +38,17 @@ class BookingRepositoryTest extends IntegrationTest {
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
         BookingEntity duplicatedEntity = BookingEntity.builder()
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
-                .hikers(hikers)
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(hikers)
+                        .build())
                 .build();
         bookingRepository.save(firstEntity);
         bookingRepository.save(duplicatedEntity);

@@ -1,5 +1,6 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
+import com.element.hikingTrail.trail.domain.BookingDetail;
 import com.element.hikingTrail.trail.domain.Hiker;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,6 @@ public class BookingEntity {
     @Id
     private String bookingId;
     private Trail trail;
-    private List<Hiker> hikers;
+    private BookingDetail bookingDetail;
     private String bookingStatus;
 }

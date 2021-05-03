@@ -58,8 +58,8 @@ class BookingControllerTest extends IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getBooking().getTrail())
                 .isEqualTo(expectedTrail);
-        assertThat(response.getBody().getBooking().getHikers())
-                .isEqualTo(hikers);
+        assertThat(response.getBody().getBooking().getBookingDetail().getHikers())
+                .isEqualTo(bookingRequest.getBookingDetail().getHikers());
         assertThat(response.getBody().getBooking().getBookingId())
                 .isNotEmpty();
         assertThat(response.getBody().getBooking().getBookingStatus())
