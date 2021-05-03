@@ -1,9 +1,11 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
+import com.element.hikingTrail.trail.application.exception.TrailNotFound;
 import com.element.hikingTrail.trail.infrastructure.TrailMapper;
 import com.element.hikingTrail.trail.application.TrailPersistencePort;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,11 +29,12 @@ public class TrailDatabaseAdapter implements TrailPersistencePort {
     }
 
     @Override
-    public List<Trail> findByName(String name) {
-        var trailEntities = trailRepository.findTrailEntityByName(name);
+    @SneakyThrows
+    public Trail findByName(String name) {
+        var trail =
+                trailRepository.findTrailEntityByName(name).orElseThrow(() ->
+                        new TrailNotFound("Trail "+ name +" not found"));
 
-        return trailEntities.stream()
-                .map(trailMapper::fromEntityToDomain)
-                .collect(toList());
+        return trailMapper.fromEntityToDomain(trail);
     }
 }

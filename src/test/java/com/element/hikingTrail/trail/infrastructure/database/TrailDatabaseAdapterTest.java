@@ -1,5 +1,7 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
+import com.element.hikingTrail.trail.application.exception.BookingNotFound;
+import com.element.hikingTrail.trail.application.exception.TrailNotFound;
 import com.element.hikingTrail.trail.infrastructure.TrailMapper;
 import com.element.hikingTrail.trail.domain.Trail;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +15,12 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class TrailDatabaseAdapterTest {
@@ -57,15 +61,28 @@ class TrailDatabaseAdapterTest {
 
     @Test
     public void shouldFindTrailEntityByNameAndMapToTrailDomain() {
-        List<Trail> expectedTrails = singletonList(Trail.builder()
+        Trail expectedTrails = Trail.builder()
                 .name("Mordor")
-                .build());
+                .build();
         Mockito.when(trailRepository.findTrailEntityByName("Mordor"))
-                .thenReturn(singletonList(entities.get(0)));
+                .thenReturn(Optional.of(entities.get(0)));
 
-        List<Trail> actualTrails = trailDatabaseAdapter.findByName("Mordor");
+        Trail actualTrails = trailDatabaseAdapter.findByName("Mordor");
 
         assertThat(actualTrails).isEqualTo(expectedTrails);
+    }
+
+    @Test
+    public void shouldThrowTrailNotFoundExceptionWhenThereIsNoTrailWithName() {
+        Mockito.when(trailRepository.findTrailEntityByName("Mordor"))
+                .thenReturn(Optional.empty());
+        Exception exception = assertThrows(TrailNotFound.class,
+                () -> trailDatabaseAdapter.findByName("Mordor"));
+        String expectedMessage = "Trail Mordor not found";
+
+        String actualMessage = exception.getMessage();
+
+        assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
 }

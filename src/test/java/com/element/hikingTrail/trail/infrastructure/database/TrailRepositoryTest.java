@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,9 +25,9 @@ class TrailRepositoryTest extends IntegrationTest {
                 .name("testName")
                 .build();
         trailRepository.save(testEntity);
-        var expected = singletonList(testEntity);
+        var expected = Optional.of(testEntity);
 
-        List<TrailEntity> actual = trailRepository.findTrailEntityByName("testName");
+        var actual = trailRepository.findTrailEntityByName("testName");
 
         assertThat(actual).isEqualTo(expected);
     }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 @RestController
 @RequiredArgsConstructor
 public class TrailController {
@@ -27,7 +29,7 @@ public class TrailController {
         List<Trail> availableTrails;
 
         if (StringUtils.hasText(trailName)) {
-            availableTrails = trailService.findByName(trailName);
+            availableTrails = asList(trailService.findByName(trailName));
 
         } else {
             availableTrails = trailService.findAllTrails();
