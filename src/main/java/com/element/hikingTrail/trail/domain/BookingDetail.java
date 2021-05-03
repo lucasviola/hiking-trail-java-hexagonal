@@ -1,15 +1,14 @@
 package com.element.hikingTrail.trail.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookingDetail {
 
-    private final List<Hiker> hikers;
+    private List<Hiker> hikers;
 }

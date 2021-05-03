@@ -1,13 +1,16 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
 import com.element.hikingTrail.IntegrationTest;
+import com.element.hikingTrail.trail.domain.Hiker;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -17,6 +20,11 @@ class BookingRepositoryTest extends IntegrationTest {
 
     @Test
     public void shouldNotSaveSameBookingTwice() {
+        bookingRepository.deleteAll();
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
+                .build());
         Trail trail = Trail.builder()
                 .name("trailName")
                 .endAt("12:00")
@@ -26,23 +34,25 @@ class BookingRepositoryTest extends IntegrationTest {
                 .unitPrice(150)
                 .build();
         String uniqueId = "id";
-        BookingEntity saveOnce = BookingEntity.builder()
+        BookingEntity firstEntity = BookingEntity.builder()
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
+                .hikers(hikers)
                 .build();
-        BookingEntity update = BookingEntity.builder()
+        BookingEntity duplicatedEntity = BookingEntity.builder()
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
+                .hikers(hikers)
                 .build();
-        bookingRepository.save(saveOnce);
-        bookingRepository.save(update);
+        bookingRepository.save(firstEntity);
+        bookingRepository.save(duplicatedEntity);
 
         List<BookingEntity> entities = bookingRepository.findAll();
 
         assertThat(entities.size()).isEqualTo(1);
-        assertThat(entities.get(0).getBookingId()).isEqualTo(uniqueId);
+        assertThat(entities.get(0)).isEqualTo(firstEntity);
     }
 
 }

@@ -1,14 +1,13 @@
 package com.element.hikingTrail.trail.infrastructure;
 
-import com.element.hikingTrail.trail.domain.BookingStatus;
-import com.element.hikingTrail.trail.domain.Booking;
-import com.element.hikingTrail.trail.domain.Trail;
+import com.element.hikingTrail.trail.domain.*;
 import com.element.hikingTrail.trail.infrastructure.database.BookingEntity;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingRequest;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingResponse;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BookingMapperTest {
@@ -16,9 +15,15 @@ class BookingMapperTest {
     private final BookingMapper mapper = Mappers.getMapper(BookingMapper.class);
 
     @Test
-    public void shouldMapTrailNameFromBookingRequestToDomain() {
+    public void shouldMapFromBookingRequestToDomain() {
         BookingRequest bookingRequest = BookingRequest.builder()
                 .trailName("trailName")
+                .bookingDetail(BookingDetail.builder()
+                        .hikers(singletonList(Hiker.builder()
+                                .name("Raul")
+                                .age(27)
+                                .build()))
+                        .build())
                 .build();
         Trail trail = Trail.builder()
                 .name("trailName")
@@ -32,10 +37,15 @@ class BookingMapperTest {
         Booking actual = mapper.mapFromRequestToDomain(bookingRequest, trail);
 
         assertThat(actual.getTrail()).isEqualTo(trail);
+        assertThat(actual.getHikers()).isEqualTo(bookingRequest.getBookingDetail().getHikers());
     }
 
     @Test
     public void shouldMapBookingDomainToBookingEntity() {
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
+                .build());
         Trail trail = Trail.builder()
                 .name("trailName")
                 .endAt("12:00")
@@ -48,11 +58,13 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
+                .hikers(hikers)
                 .build();
         var expected = BookingEntity.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
+                .hikers(hikers)
                 .build();
 
         BookingEntity actual = mapper.mapFromDomainToEntity(booking);
@@ -62,6 +74,10 @@ class BookingMapperTest {
 
     @Test
     public void shouldMapFromEntityToDomain() {
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
+                .build());
         Trail trail = Trail.builder()
                 .name("trailName")
                 .endAt("12:00")
@@ -74,11 +90,13 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
+                .hikers(hikers)
                 .build();
         var expected = Booking.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
+                .hikers(hikers)
                 .build();
 
         Booking actual = mapper.mapFromEntityToDomain(bookingEntity);
@@ -88,6 +106,10 @@ class BookingMapperTest {
 
     @Test
     public void shouldMapFromBookingDomainToBookingResponse() {
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
+                .build());
         Trail trail = Trail.builder()
                 .name("trailName")
                 .endAt("12:00")
@@ -99,6 +121,7 @@ class BookingMapperTest {
         var booking = Booking.builder()
                 .trail(trail)
                 .bookingStatus("status")
+                .hikers(hikers)
                 .bookingId("id")
                 .build();
         var expectedBookingResponse = BookingResponse.builder()
@@ -109,5 +132,4 @@ class BookingMapperTest {
 
         assertThat(actual).isEqualTo(expectedBookingResponse);
     }
-
 }

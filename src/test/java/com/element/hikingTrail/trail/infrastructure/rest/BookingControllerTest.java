@@ -25,7 +25,7 @@ class BookingControllerTest extends IntegrationTest {
 
     @Test
     @DisplayName("POST /booking")
-    public void whenPostBooking_withRequestBody_shouldSaveBookingInTheDatabase() {
+    public void whenPostBooking_withRequestBody_shouldReturnSavedBooking_WithStatusAndId() {
         trailRepository.save(TrailEntity.builder()
                 .name("trail")
                 .endAt("12:00")
@@ -33,6 +33,10 @@ class BookingControllerTest extends IntegrationTest {
                 .minimumAge(10)
                 .startAt("07:00")
                 .unitPrice(150)
+                .build());
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
                 .build());
         var expectedTrail = Trail.builder()
                 .name("trail")
@@ -45,10 +49,7 @@ class BookingControllerTest extends IntegrationTest {
         var bookingRequest = BookingRequest.builder()
                 .trailName("trail")
                 .bookingDetail(BookingDetail.builder()
-                        .hikers(singletonList(Hiker.builder()
-                                .name("Raul")
-                                .age(27)
-                                .build()))
+                        .hikers(hikers)
                         .build())
                 .build();
 
@@ -57,6 +58,10 @@ class BookingControllerTest extends IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getBooking().getTrail())
                 .isEqualTo(expectedTrail);
+        assertThat(response.getBody().getBooking().getHikers())
+                .isEqualTo(hikers);
+        assertThat(response.getBody().getBooking().getBookingId())
+                .isNotEmpty();
         assertThat(response.getBody().getBooking().getBookingStatus())
                 .isEqualTo(BookingStatus.BOOKED.name());
     }

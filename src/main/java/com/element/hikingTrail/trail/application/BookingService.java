@@ -25,15 +25,12 @@ public class BookingService {
 
         var bookedTrail = Booking.builder()
                 .trail(booking.getTrail())
+                .hikers(booking.getHikers())
                 .bookingId(generateId())
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .build();
 
         return bookingDatabaseAdapter.saveBooking(bookedTrail);
-    }
-
-    private String generateId() {
-        return RandomStringUtils.randomAlphanumeric(5);
     }
 
     public Booking findBooking(String bookingId) {
@@ -47,5 +44,9 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.CANCELED.name());
 
         return bookingDatabaseAdapter.saveBooking(booking);
+    }
+
+    private String generateId() {
+        return RandomStringUtils.randomAlphanumeric(5);
     }
 }

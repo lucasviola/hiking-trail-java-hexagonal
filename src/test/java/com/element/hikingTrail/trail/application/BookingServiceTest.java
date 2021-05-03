@@ -2,6 +2,7 @@ package com.element.hikingTrail.trail.application;
 
 import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.domain.BookingStatus;
+import com.element.hikingTrail.trail.domain.Hiker;
 import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.BookingDatabaseAdapter;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,7 +73,7 @@ class BookingServiceTest {
 
     @Test
     public void whenCancel_shouldUpdateBookingWithCanceledStatus() {
-        Trail trail = Trail.builder()
+        var trail = Trail.builder()
                 .name("trailName")
                 .endAt("12:00")
                 .maximumAge(50)
@@ -81,14 +81,20 @@ class BookingServiceTest {
                 .startAt("07:00")
                 .unitPrice(150)
                 .build();
-        String bookingId = "xvcfg";
+        var hikers = singletonList(Hiker.builder()
+                .name("Raul")
+                .age(27)
+                .build());
+        var bookingId = "xvcfg";
         Booking bookedTrail = Booking.builder()
                 .trail(trail)
+                .hikers(hikers)
                 .bookingId(bookingId)
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .build();
-        var expectedCanceledBooking = Booking.builder()
+        Booking expectedCanceledBooking = Booking.builder()
                 .trail(trail)
+                .hikers(hikers)
                 .bookingId(bookingId)
                 .bookingStatus(BookingStatus.CANCELED.name())
                 .build();

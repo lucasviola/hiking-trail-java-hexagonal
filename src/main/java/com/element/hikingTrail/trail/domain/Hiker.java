@@ -1,13 +1,12 @@
 package com.element.hikingTrail.trail.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Hiker {
-    private final String name;
-    private final int age;
+    private String name;
+    private int age;
 }
