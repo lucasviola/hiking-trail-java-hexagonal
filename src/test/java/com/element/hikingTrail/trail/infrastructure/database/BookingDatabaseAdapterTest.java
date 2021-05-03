@@ -1,5 +1,6 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
+import com.element.hikingTrail.trail.application.exception.BookingNotFound;
 import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,18 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookingDatabaseAdapterTest {
+
 
     @Mock
     private BookingRepository bookingRepository;
@@ -59,7 +64,7 @@ class BookingDatabaseAdapterTest {
                 .trailName("name")
                 .bookingStatus("status")
                 .build();
-        when(bookingRepository.findByBookingId(bookingId)).thenReturn(bookingEntity);
+        when(bookingRepository.findByBookingId(bookingId)).thenReturn(Optional.of(bookingEntity));
 
         Booking actual = bookingDatabaseAdapter.findByBookingId(bookingId);
 
@@ -67,4 +72,15 @@ class BookingDatabaseAdapterTest {
         assertThat(actual).isEqualTo(booking);
     }
 
+    @Test
+    public void shouldThrowBookingNotFoundWhenDatabaseFindByIdComesEmpty() {
+        when(bookingRepository.findByBookingId("abc")).thenReturn(Optional.empty());
+        Exception exception = assertThrows(BookingNotFound.class,
+                () -> bookingDatabaseAdapter.findByBookingId("abc"));
+        String expectedMessage = "Booking with id: abc not found";
+
+        String actualMessage = exception.getMessage();
+
+        assertThat(actualMessage).isEqualTo(expectedMessage);
+    }
 }
