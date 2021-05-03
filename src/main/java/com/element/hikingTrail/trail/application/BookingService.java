@@ -3,6 +3,7 @@ package com.element.hikingTrail.trail.application;
 import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.domain.BookingStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,17 @@ public class BookingService {
 
     private final BookingPersistencePort bookingDatabaseAdapter;
 
+    @SneakyThrows
     public Booking bookTrail(Booking booking) {
+//        booking.getHikers()
+//                .forEach(hiker -> {
+//                    if (hiker.getAge() < booking.getTrailName().getMinimumAge() || hiker.getAge() > booking.getTrailName().getMaximumAge()) {
+//                        throw new AgeNotInRange("Age Not in range");
+//                    }
+//                });
 
         var bookedTrail = Booking.builder()
-                .trailName(booking.getTrailName())
+                .trail(booking.getTrail())
                 .bookingId(generateId())
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .build();

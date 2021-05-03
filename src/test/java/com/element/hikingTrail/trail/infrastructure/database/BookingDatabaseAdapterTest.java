@@ -2,6 +2,7 @@ package com.element.hikingTrail.trail.infrastructure.database;
 
 import com.element.hikingTrail.trail.application.exception.BookingNotFound;
 import com.element.hikingTrail.trail.domain.Booking;
+import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,14 +34,22 @@ class BookingDatabaseAdapterTest {
 
     @Test
     public void shouldSaveBookingInTheDBAndReturnBookingDomain() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
         var booking = Booking.builder()
-                .trailName("name")
+                .trail(trail)
                 .bookingId("id")
                 .bookingStatus("status")
                 .build();
         var bookingEntity = BookingEntity.builder()
                 .bookingId("id")
-                .trailName("name")
+                .trail(trail)
                 .bookingStatus("status")
                 .build();
         when(bookingRepository.save(any(BookingEntity.class))).thenReturn(bookingEntity);
@@ -53,15 +62,23 @@ class BookingDatabaseAdapterTest {
 
     @Test
     public void shouldFindBookEntityByIdAndReturnBooking() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
         var bookingId = "fdsdf";
         var booking = Booking.builder()
-                .trailName("name")
+                .trail(trail)
                 .bookingId(bookingId)
                 .bookingStatus("status")
                 .build();
         var bookingEntity = BookingEntity.builder()
                 .bookingId(bookingId)
-                .trailName("name")
+                .trail(trail)
                 .bookingStatus("status")
                 .build();
         when(bookingRepository.findByBookingId(bookingId)).thenReturn(Optional.of(bookingEntity));

@@ -2,6 +2,7 @@ package com.element.hikingTrail.trail.infrastructure;
 
 import com.element.hikingTrail.trail.domain.BookingStatus;
 import com.element.hikingTrail.trail.domain.Booking;
+import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.BookingEntity;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingRequest;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingResponse;
@@ -19,23 +20,39 @@ class BookingMapperTest {
         BookingRequest bookingRequest = BookingRequest.builder()
                 .trailName("trailName")
                 .build();
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
 
-        Booking actual = mapper.mapFromRequestToDomain(bookingRequest);
+        Booking actual = mapper.mapFromRequestToDomain(bookingRequest, trail);
 
-        assertThat(actual.getTrailName()).isEqualTo("trailName");
+        assertThat(actual.getTrail()).isEqualTo(trail);
     }
 
     @Test
     public void shouldMapBookingDomainToBookingEntity() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
         var booking = Booking.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
-                .trailName("name")
+                .trail(trail)
                 .build();
         var expected = BookingEntity.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
-                .trailName("name")
+                .trail(trail)
                 .build();
 
         BookingEntity actual = mapper.mapFromDomainToEntity(booking);
@@ -45,15 +62,23 @@ class BookingMapperTest {
 
     @Test
     public void shouldMapFromEntityToDomain() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
         var bookingEntity = BookingEntity.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
-                .trailName("name")
+                .trail(trail)
                 .build();
         var expected = Booking.builder()
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
-                .trailName("name")
+                .trail(trail)
                 .build();
 
         Booking actual = mapper.mapFromEntityToDomain(bookingEntity);
@@ -63,8 +88,16 @@ class BookingMapperTest {
 
     @Test
     public void shouldMapFromBookingDomainToBookingResponse() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
         var booking = Booking.builder()
-                .trailName("name")
+                .trail(trail)
                 .bookingStatus("status")
                 .bookingId("id")
                 .build();

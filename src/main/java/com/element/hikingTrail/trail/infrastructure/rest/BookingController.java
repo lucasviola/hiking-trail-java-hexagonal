@@ -1,7 +1,9 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
 import com.element.hikingTrail.trail.application.BookingService;
+import com.element.hikingTrail.trail.application.TrailService;
 import com.element.hikingTrail.trail.domain.Booking;
+import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
+    private final TrailService trailService;
     private final BookingMapper bookingMapper;
 
     @PostMapping("/booking")
     public ResponseEntity<BookingResponse> bookTrail(@RequestBody BookingRequest bookingRequest) {
+        Trail trail = trailService.findByName(bookingRequest.getTrailName());
 
-        Booking booking = bookingMapper.mapFromRequestToDomain(bookingRequest);
+        Booking booking = bookingMapper.mapFromRequestToDomain(bookingRequest, trail);
         Booking bookedTrail = bookingService.bookTrail(booking);
 
         var responseBody =
