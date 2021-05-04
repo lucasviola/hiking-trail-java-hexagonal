@@ -48,7 +48,7 @@ class BookingControllerTest extends IntegrationTest {
                 .build();
         var bookingRequest = BookingRequest.builder()
                 .trailName("trail")
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -58,8 +58,8 @@ class BookingControllerTest extends IntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getBooking().getTrail())
                 .isEqualTo(expectedTrail);
-        assertThat(response.getBody().getBooking().getBookingDetail().getHikers())
-                .isEqualTo(bookingRequest.getBookingDetail().getHikers());
+        assertThat(response.getBody().getBooking().getBookingDetails().getHikers())
+                .isEqualTo(bookingRequest.getBookingDetails().getHikers());
         assertThat(response.getBody().getBooking().getBookingId())
                 .isNotEmpty();
         assertThat(response.getBody().getBooking().getBookingStatus())

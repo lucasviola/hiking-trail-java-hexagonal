@@ -10,5 +10,5 @@ import lombok.*;
 public class BookingRequest {
 
     private String trailName;
-    private BookingDetail bookingDetail;
+    private BookingDetail bookingDetails;
 }

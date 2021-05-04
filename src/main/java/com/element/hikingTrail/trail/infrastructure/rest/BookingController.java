@@ -6,11 +6,13 @@ import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BookingController {
@@ -20,6 +22,8 @@ public class BookingController {
 
     @PostMapping("/booking")
     public ResponseEntity<BookingResponse> bookTrail(@RequestBody BookingRequest bookingRequest) {
+        log.trace("[BookingController@bookTrail] - Booking request received: {}", bookingRequest);
+
         Trail trail = trailService.findByName(bookingRequest.getTrailName());
 
         Booking booking = bookingMapper.mapFromRequestToDomain(bookingRequest, trail);
@@ -28,6 +32,7 @@ public class BookingController {
         var responseBody =
                 bookingMapper.mapFromBookingToBookingResponse(bookedTrail);
 
+        log.trace("[BookingController@bookTrail] - Trail booked succesfully!: {}", responseBody);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

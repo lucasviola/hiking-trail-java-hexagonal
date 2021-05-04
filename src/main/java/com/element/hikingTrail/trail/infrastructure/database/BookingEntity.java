@@ -1,7 +1,6 @@
 package com.element.hikingTrail.trail.infrastructure.database;
 
 import com.element.hikingTrail.trail.domain.BookingDetail;
-import com.element.hikingTrail.trail.domain.Hiker;
 import com.element.hikingTrail.trail.domain.Trail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +19,6 @@ public class BookingEntity {
     @Id
     private String bookingId;
     private Trail trail;
-    private BookingDetail bookingDetail;
+    private BookingDetail bookingDetails;
     private String bookingStatus;
 }

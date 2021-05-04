@@ -18,7 +18,7 @@ class BookingMapperTest {
     public void shouldMapFromBookingRequestToDomain() {
         BookingRequest bookingRequest = BookingRequest.builder()
                 .trailName("trailName")
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(singletonList(Hiker.builder()
                                 .name("Raul")
                                 .age(27)
@@ -37,7 +37,7 @@ class BookingMapperTest {
         Booking actual = mapper.mapFromRequestToDomain(bookingRequest, trail);
 
         assertThat(actual.getTrail()).isEqualTo(trail);
-        assertThat(actual.getBookingDetail().getHikers()).isEqualTo(bookingRequest.getBookingDetail().getHikers());
+        assertThat(actual.getBookingDetails().getHikers()).isEqualTo(bookingRequest.getBookingDetails().getHikers());
     }
 
     @Test
@@ -58,7 +58,7 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -66,7 +66,7 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -94,7 +94,7 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -102,7 +102,7 @@ class BookingMapperTest {
                 .bookingId("id")
                 .bookingStatus(BookingStatus.BOOKED.name())
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -129,7 +129,7 @@ class BookingMapperTest {
         var booking = Booking.builder()
                 .trail(trail)
                 .bookingStatus("status")
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .bookingId("id")

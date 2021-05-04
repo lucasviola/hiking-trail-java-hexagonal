@@ -6,7 +6,6 @@ import com.element.hikingTrail.trail.infrastructure.database.BookingEntity;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingRequest;
 import com.element.hikingTrail.trail.infrastructure.rest.BookingResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper
 public interface BookingMapper {

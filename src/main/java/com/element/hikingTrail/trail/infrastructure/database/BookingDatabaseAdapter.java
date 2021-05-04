@@ -6,8 +6,10 @@ import com.element.hikingTrail.trail.domain.Booking;
 import com.element.hikingTrail.trail.infrastructure.BookingMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BookingDatabaseAdapter implements BookingPersistencePort {
@@ -17,9 +19,9 @@ public class BookingDatabaseAdapter implements BookingPersistencePort {
 
     @Override
     public Booking saveBooking(Booking booking) {
+        log.trace("[BookingDatabaseAdaptere@saveBooking] - Saving booking to the database: {}", booking);
 
         BookingEntity bookingEntity = bookingMapper.mapFromDomainToEntity(booking);
-
         BookingEntity saved = bookingRepository.save(bookingEntity);
 
         return bookingMapper.mapFromEntityToDomain(saved);

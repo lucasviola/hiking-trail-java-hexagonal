@@ -1,5 +1,6 @@
 package com.element.hikingTrail.trail.application;
 
+import com.element.hikingTrail.trail.application.exception.HikerNotEligible;
 import com.element.hikingTrail.trail.domain.*;
 import com.element.hikingTrail.trail.infrastructure.database.BookingDatabaseAdapter;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,6 +37,12 @@ class BookingServiceTest {
                 .build();
         Booking booking = Booking.builder()
                 .trail(trail)
+                .bookingDetails(BookingDetail.builder()
+                        .hikers(singletonList(Hiker.builder()
+                                .name("Christine")
+                                .age(31)
+                                .build()))
+                        .build())
                 .build();
         Booking bookedTrail = Booking.builder()
                 .trail(trail)
@@ -43,6 +53,35 @@ class BookingServiceTest {
         bookingService.bookTrail(booking);
 
 //        verify(bookingDatabaseAdapter).saveBooking(eq(bookedTrail));
+    }
+
+
+    @Test
+    public void whenHikerIsNotEligibleShouldThrowException() {
+        Trail trail = Trail.builder()
+                .name("trailName")
+                .endAt("12:00")
+                .maximumAge(50)
+                .minimumAge(10)
+                .startAt("07:00")
+                .unitPrice(150)
+                .build();
+        Booking booking = Booking.builder()
+                .trail(trail)
+                .bookingDetails(BookingDetail.builder()
+                        .hikers(singletonList(Hiker.builder()
+                                .name("Christine")
+                                .age(60)
+                                .build()))
+                        .build())
+                .build();
+        Exception exception = assertThrows(HikerNotEligible.class,
+                () -> bookingService.bookTrail(booking));
+        String expectedMessage = "One or more hikers is above or below age limit";
+
+        String actualMessage = exception.getMessage();
+
+        assertThat(actualMessage).isEqualTo(expectedMessage);
     }
 
     @Test
@@ -85,7 +124,7 @@ class BookingServiceTest {
         var bookingId = "xvcfg";
         Booking bookedTrail = Booking.builder()
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .bookingId(bookingId)
@@ -93,7 +132,7 @@ class BookingServiceTest {
                 .build();
         Booking expectedCanceledBooking = Booking.builder()
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .bookingId(bookingId)

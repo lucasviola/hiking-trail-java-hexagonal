@@ -38,7 +38,7 @@ class BookingRepositoryTest extends IntegrationTest {
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
@@ -46,7 +46,7 @@ class BookingRepositoryTest extends IntegrationTest {
                 .bookingId(uniqueId)
                 .bookingStatus("status")
                 .trail(trail)
-                .bookingDetail(BookingDetail.builder()
+                .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
