@@ -32,8 +32,8 @@ public class TrailDatabaseAdapter implements TrailPersistencePort {
     @SneakyThrows
     public Trail findByName(String name) {
         var trail =
-                trailRepository.findTrailEntityByName(name).orElseThrow(() ->
-                        new TrailNotFound("Trail "+ name +" not found"));
+                trailRepository.findTrailEntityByName(name)
+                        .orElseThrow(() -> new TrailNotFound("Trail "+ name +" not found"));
 
         return trailMapper.fromEntityToDomain(trail);
     }

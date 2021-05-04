@@ -30,9 +30,10 @@ public class BookingDatabaseAdapter implements BookingPersistencePort {
     @Override
     @SneakyThrows
     public Booking findByBookingId(String bookingId) {
-        BookingEntity bookingEntity =
-                bookingRepository.findByBookingId(bookingId).orElseThrow(() ->
-                        new BookingNotFound("Booking with id: "+ bookingId +" not found"));
+        log.trace("[BookingDatabaseAdaptere@findBookingById] - Searching database for booking id: {}", bookingId);
+
+        BookingEntity bookingEntity = bookingRepository.findByBookingId(bookingId)
+                .orElseThrow(() -> new BookingNotFound("Booking with id: "+ bookingId +" not found"));
 
         return bookingMapper.mapFromEntityToDomain(bookingEntity);
     }

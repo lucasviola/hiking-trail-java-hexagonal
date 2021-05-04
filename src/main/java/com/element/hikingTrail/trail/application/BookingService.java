@@ -35,11 +35,12 @@ public class BookingService {
     }
 
     public Booking findBooking(String bookingId) {
+        log.trace("[BookingService@findBooking] - Searching for booking: {}", bookingId);
         return bookingDatabaseAdapter.findByBookingId(bookingId);
     }
 
     public Booking cancelBooking(String bookingId) {
-
+        log.trace("[BookingService@cancelBooking] - Canceling booking: {}", bookingId);
         Booking booking = bookingDatabaseAdapter.findByBookingId(bookingId);
 
         booking.setBookingStatus(BookingStatus.CANCELED.name());

@@ -1,7 +1,10 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
 import com.element.hikingTrail.trail.domain.BookingDetail;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder

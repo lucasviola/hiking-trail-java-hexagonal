@@ -7,3 +7,9 @@ spring:
       port: 27017
       host: mongodb
       authentication-database: admin
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.element.hikingTrail: TRACE

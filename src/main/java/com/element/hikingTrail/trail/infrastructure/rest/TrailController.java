@@ -5,6 +5,7 @@ import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import com.element.hikingTrail.trail.infrastructure.database.TrailRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TrailController {
@@ -26,6 +28,8 @@ public class TrailController {
 
     @GetMapping("/trails")
     public ResponseEntity<TrailResponse> getTrails(@RequestParam(required = false) String trailName) {
+        log.trace("[TrailController@getTrails] - Searching for available trails");
+
         List<Trail> availableTrails;
 
         if (StringUtils.hasText(trailName)) {
@@ -39,6 +43,7 @@ public class TrailController {
                 .trails(availableTrails)
                 .build();
 
+        log.trace("[TrailController@getTrails] - Trails found: {}", availableTrails);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 

@@ -21,6 +21,8 @@ public class TrailService {
     }
 
     public Trail findByName(String trailName) {
+        log.trace("[TrailService@findByName] - Finding trail by name: {}", trailName);
+
         return trailDatabaseAdapter.findByName(trailName);
     }
 }
