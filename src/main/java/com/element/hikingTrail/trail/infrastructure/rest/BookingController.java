@@ -36,8 +36,8 @@ public class BookingController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @GetMapping("/booking")
-    public ResponseEntity<BookingResponse> getBooking(@RequestParam @NonNull String bookingId) {
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<BookingResponse> getBooking(@PathVariable @NonNull String bookingId) {
         log.trace("[BookingController@getBooking] - Get Booking request received for id: {}", bookingId);
         var bookedTrail = bookingService.findBooking(bookingId);
 
@@ -47,8 +47,8 @@ public class BookingController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-    @DeleteMapping("/booking")
-    public ResponseEntity<BookingResponse> cancelBooking(@RequestParam @NonNull String bookingId) {
+    @DeleteMapping("/booking/{bookingId}")
+    public ResponseEntity<BookingResponse> cancelBooking(@PathVariable @NonNull String bookingId) {
         log.trace("[BookingController@cancelBooking] - Request received for canceling booking id: {}", bookingId);
         var canceledBooking = bookingService.cancelBooking(bookingId);
 

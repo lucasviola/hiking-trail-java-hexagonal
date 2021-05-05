@@ -1,147 +1,180 @@
 package com.element.hikingTrail.trail.infrastructure.rest;
 
 import com.element.hikingTrail.IntegrationTest;
-import com.element.hikingTrail.trail.domain.*;
+import com.element.hikingTrail.trail.domain.BookingDetail;
+import com.element.hikingTrail.trail.domain.BookingStatus;
+import com.element.hikingTrail.trail.domain.Hiker;
+import com.element.hikingTrail.trail.domain.Trail;
 import com.element.hikingTrail.trail.infrastructure.database.BookingEntity;
 import com.element.hikingTrail.trail.infrastructure.database.BookingRepository;
 import com.element.hikingTrail.trail.infrastructure.database.TrailEntity;
 import com.element.hikingTrail.trail.infrastructure.database.TrailRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.DisplayName;
+import lombok.SneakyThrows;
+import org.hamcrest.core.Is;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-class BookingControllerTest extends IntegrationTest {
+public class BookingControllerTest extends IntegrationTest {
 
-    private final BookingController bookingController;
     private final BookingRepository bookingRepository;
     private final TrailRepository trailRepository;
+    private final BookingController bookingController;
+    private final MockMvc mockMvc;
 
-    @Test
-    @DisplayName("POST /booking")
-    public void whenPostBooking_withRequestBody_shouldReturnSavedBooking_WithStatusAndId() {
-        trailRepository.save(TrailEntity.builder()
-                .name("trail")
-                .endAt("12:00")
-                .maximumAge(50)
-                .minimumAge(10)
-                .startAt("07:00")
-                .unitPrice(150)
-                .build());
+    @BeforeEach
+    public void setup() {
         var hikers = singletonList(Hiker.builder()
                 .name("Raul")
                 .age(27)
                 .build());
-        var expectedTrail = Trail.builder()
-                .name("trail")
+        TrailEntity trailEntity = TrailEntity.builder()
+                .name("Shire")
                 .endAt("12:00")
                 .maximumAge(50)
                 .minimumAge(10)
                 .startAt("07:00")
                 .unitPrice(150)
                 .build();
-        var bookingRequest = BookingRequest.builder()
-                .trailName("trail")
+        String uniqueId = "id";
+        BookingEntity bookingEntity = BookingEntity.builder()
+                .bookingId(uniqueId)
+                .bookingStatus("status")
+                .trail(Trail.builder()
+                        .name("Shire")
+                        .endAt("12:00")
+                        .maximumAge(50)
+                        .minimumAge(10)
+                        .startAt("07:00")
+                        .unitPrice(150)
+                        .build())
                 .bookingDetails(BookingDetail.builder()
                         .hikers(hikers)
                         .build())
                 .build();
-
-        ResponseEntity<BookingResponse> response = bookingController.bookTrail(bookingRequest);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getBooking().getTrail())
-                .isEqualTo(expectedTrail);
-        assertThat(response.getBody().getBooking().getBookingDetails().getHikers())
-                .isEqualTo(bookingRequest.getBookingDetails().getHikers());
-        assertThat(response.getBody().getBooking().getBookingId())
-                .isNotEmpty();
-        assertThat(response.getBody().getBooking().getBookingStatus())
-                .isEqualTo(BookingStatus.BOOKED.name());
+        trailRepository.save(trailEntity);
+        bookingRepository.save(bookingEntity);
     }
 
     @Test
-    @DisplayName("GET /booking?bookingId=x")
-    public void viewBooking() {
-        String bookingId = "vxzcf";
-        Trail trail = Trail.builder()
-                .name("trailName")
-                .endAt("12:00")
-                .maximumAge(50)
-                .minimumAge(10)
-                .startAt("07:00")
-                .unitPrice(150)
-                .build();
-        trailRepository.save(TrailEntity.builder()
-                .name(trail.getName())
-                .endAt(trail.getEndAt())
-                .maximumAge(trail.getMaximumAge())
-                .minimumAge(trail.getMinimumAge())
-                .startAt(trail.getStartAt())
-                .unitPrice(trail.getUnitPrice())
-                .build());
-        bookingRepository.save(BookingEntity.builder()
-                .bookingId(bookingId)
-                .trail(trail)
-                .bookingStatus(BookingStatus.BOOKED.name())
-                .build());
-        var expectedResponse = BookingResponse.builder()
-                .booking(Booking.builder()
-                        .bookingId(bookingId)
-                        .trail(trail)
-                        .bookingStatus(BookingStatus.BOOKED.name())
-                        .build())
-                .build();
+    @SneakyThrows
+    public void whenPostRequestToBooking_thenReturnsBookingResponse() {
+        String request = "{\n" +
+                "  \"trailName\": \"Shire\",\n" +
+                "  \"bookingDetails\": {\n" +
+                "    \"hikers\": [\n" +
+                "      {\n" +
+                "        \"name\": \"Raul\",\n" +
+                "        \"age\": 27\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }  \n" +
+                "}";
 
-        ResponseEntity<BookingResponse> response = bookingController.getBooking(bookingId);
-
-        assertThat(response.getBody()).isEqualTo(expectedResponse);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        mockMvc.perform(MockMvcRequestBuilders.post("/booking")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.booking.bookingStatus",
+                        Is.is(BookingStatus.BOOKED.name())))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
-    @DisplayName("DELETE /booking?bookingId=fdsdf")
-    public void whenDeleteBooking_withBookingIdAsParam_shouldChangeStatusToCanceled() {
-        String bookingId = "dsasd";
-        Trail trail = Trail.builder()
-                .name("trailName")
-                .endAt("12:00")
-                .maximumAge(50)
-                .minimumAge(10)
-                .startAt("07:00")
-                .unitPrice(150)
-                .build();
-        trailRepository.save(TrailEntity.builder()
-                .name(trail.getName())
-                .endAt(trail.getEndAt())
-                .maximumAge(trail.getMaximumAge())
-                .minimumAge(trail.getMinimumAge())
-                .startAt(trail.getStartAt())
-                .unitPrice(trail.getUnitPrice())
-                .build());
-        bookingRepository.save(BookingEntity.builder()
-                .bookingId(bookingId)
-                .trail(trail)
-                .bookingStatus(BookingStatus.BOOKED.name())
-                .build());
-        var booking = Booking.builder()
-                .bookingStatus(BookingStatus.CANCELED.name())
-                .trail(trail)
-                .bookingId(bookingId)
-                .build();
-        var expectedResponse = BookingResponse.builder()
-                .booking(booking)
-                .build();
+    @SneakyThrows
+    public void whenPostRequestToBooking_withNonExistingTrail_shouldReturnNotFound() {
+        String request = "{\n" +
+                "  \"trailName\": \"InvalidTrail\",\n" +
+                "  \"bookingDetails\": {\n" +
+                "    \"hikers\": [\n" +
+                "      {\n" +
+                "        \"name\": \"Raul\",\n" +
+                "        \"age\": 27\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }  \n" +
+                "}";
 
-        ResponseEntity<BookingResponse> response = bookingController.cancelBooking(bookingId);
-
-        assertThat(response.getBody()).isEqualTo(expectedResponse);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        mockMvc.perform(MockMvcRequestBuilders.post("/booking")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage",
+                        Is.is("Trail InvalidTrail not found")))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
     }
+
+    @Test
+    @SneakyThrows
+    public void whenPostRequestToBooking_withHikerNotEligible_shouldReturnBadRequest() {
+        String request = "{\n" +
+                "  \"trailName\": \"Shire\",\n" +
+                "  \"bookingDetails\": {\n" +
+                "    \"hikers\": [\n" +
+                "      {\n" +
+                "        \"name\": \"Jose\",\n" +
+                "        \"age\": 8\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }  \n" +
+                "}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/booking")
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage",
+                        Is.is("One or more hikers is above or below age limit")))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @SneakyThrows
+    @Test
+    public void whenGetBookingWithBookingId_shouldReturnBookingInTheResponseBody() {
+        String expectedResponse = "{\"booking\":{\"bookingId\":\"id\",\"trail\":{\"name\":\"Shire\",\"startAt\":\"07:00\",\"endAt\":\"12:00\",\"minimumAge\":10,\"maximumAge\":50,\"unitPrice\":150.0},\"bookingDetails\":{\"hikers\":[{\"name\":\"Raul\",\"age\":27}]},\"bookingStatus\":\"status\"}}";
+
+        String response = mockMvc.perform(MockMvcRequestBuilders.get("/booking/id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(response).isEqualTo(expectedResponse);
+    }
+
+    @Test
+    @SneakyThrows
+    public void whenDeleteRequestToCancelBooking_shouldReturnBookingWithStatusCanceled() {
+        String expectedResponse = "{\"booking\":{\"bookingId\":\"id\",\"trail\":{\"name\":\"Shire\",\"startAt\":\"07:00\",\"endAt\":\"12:00\",\"minimumAge\":10,\"maximumAge\":50,\"unitPrice\":150.0},\"bookingDetails\":{\"hikers\":[{\"name\":\"Raul\",\"age\":27}]},\"bookingStatus\":\"CANCELED\"}}";
+
+        String response = mockMvc.perform(MockMvcRequestBuilders.delete("/booking/id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(response).isEqualTo(expectedResponse);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        trailRepository.deleteAll();
+        bookingRepository.deleteAll();
+    }
+
 }

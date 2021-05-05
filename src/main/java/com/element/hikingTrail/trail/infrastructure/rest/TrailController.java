@@ -9,14 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 @Slf4j
 @RestController
@@ -27,23 +26,30 @@ public class TrailController {
     private final TrailRepository trailRepository;
 
     @GetMapping("/trails")
-    public ResponseEntity<TrailResponse> getTrails(@RequestParam(required = false) String trailName) {
+    public ResponseEntity<TrailResponse> getTrails() {
         log.trace("[TrailController@getTrails] - Searching for available trails");
 
-        List<Trail> availableTrails;
-
-        if (StringUtils.hasText(trailName)) {
-            availableTrails = asList(trailService.findByName(trailName));
-
-        } else {
-            availableTrails = trailService.findAllTrails();
-        }
+        var availableTrails = trailService.findAllTrails();
 
         var responseBody = TrailResponse.builder()
                 .trails(availableTrails)
                 .build();
 
         log.trace("[TrailController@getTrails] - Trails found: {}", availableTrails);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
+    @GetMapping("/trails/{trailName}")
+    public ResponseEntity<TrailResponse> getTrail(@PathVariable String trailName) {
+        log.trace("[TrailController@getTrails] - Searching for trail: {}", trailName);
+
+        var trail = trailService.findByName(trailName);
+
+        var responseBody = TrailResponse.builder()
+                .trails(singletonList(trail))
+                .build();
+
+        log.trace("[TrailController@getTrails] - Trail found: {}", trail);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
