@@ -23,4 +23,7 @@ test:
 stop:
 	docker compose down
 
-refresh: build-gradle stop build-app build-mongo run
+start: build-gradle stop build-app build-mongo run
+
+seed-database:
+	sh ./docker/mongodb-seed/seed-database.sh
